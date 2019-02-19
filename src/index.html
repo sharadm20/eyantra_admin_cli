@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>e-Yantra Notification Center</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        a { cursor: pointer; }
+        .help-block { font-size: 12px; }
+        footer.main-footer {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  background: #222;
+  padding: 10px 0;
+}
+
+footer.main-footer p {
+  font-size: 0.7em;
+  color: #777;
+  margin: 0;
+}
+
+/* MAIN FOOTER MEDIAQUERIES ------------------------- */
+@media (max-width: 576px) {
+  footer.main-footer div[class*="col-"] {
+    text-align: center !important;
+  }
+}
+
+@media (min-width: 992px) {
+  footer.main-footer p {
+    font-size: 0.9em;
+  }
+}
+
+section.charts div[class*="col-"] {
+  margin-bottom: 30px;
+}
+
+section.charts header {
+  padding: 30px 0;
+}
+
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <!-- credits -->
+  <footer class="main-footer">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-6">
+              <p>Copyright 2019 © e-Yantra | All Rights Reserved</p>
+            </div>
+            <div class="col-sm-6 text-right">
+              e-Yantra Notification Center
+            </div>
+          </div>
+        </div>
+  </footer>
+</body>
+</html>
