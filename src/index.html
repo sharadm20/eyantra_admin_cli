@@ -5,14 +5,17 @@
     <title>e-Yantra Notification Center</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
-        a { cursor: pointer; }
-        .help-block { font-size: 12px; }
-        footer.main-footer {
-  position: absolute;
-  width: 100%;
-  bottom: 0;
+ body { min-height:100%; padding:0; margin:0; position:relative; }
+    
+a { cursor: pointer; }
+ 
+.help-block { font-size: 12px; }
+footer.main-footer {
+    clear: both;
+    position: relative;
+    height: 40px;
+    margin-top: -40px;
   background: #222;
-  padding: 10px 0;
 }
 
 footer.main-footer p {
@@ -34,21 +37,18 @@ footer.main-footer p {
   }
 }
 
-section.charts div[class*="col-"] {
-  margin-bottom: 30px;
-}
-
-section.charts header {
-  padding: 30px 0;
-}
 
     </style>
 </head>
 <body>
+
+
     <div id="app"></div>
 
+
     <!-- credits -->
-  <footer class="main-footer">
+ 
+   <footer class="main-footer">
         <div class="container-fluid">
           <div class="row">
             <div class="col-sm-6">
@@ -59,6 +59,8 @@ section.charts header {
             </div>
           </div>
         </div>
+
   </footer>
 </body>
+
 </html>

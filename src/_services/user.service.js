@@ -7,6 +7,7 @@ export const userService = {
     register,
     getAll,
     getById,
+    notification,
     update,
     delete: _delete
 };
@@ -18,7 +19,7 @@ function login(username, password) {
         body: JSON.stringify({ username, password })
     };
 
-    return fetch(`${config.apiUrl}/users/adminauth`, requestOptions)
+    return fetch(`${config.apiUrl}/users/adminlogin`, requestOptions)
         .then(handleResponse)
         .then(user => {
             // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -81,6 +82,16 @@ function _delete(id) {
     return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(handleResponse);
 }
 
+function notification(title, message) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({title, message})
+    };
+
+    return fetch(`${config.apiUrl}/send`, requestOptions).then(handleResponse);
+}
+
 function handleResponse(response) {
     return response.text().then(text => {
         const data = text && JSON.parse(text);
@@ -94,7 +105,7 @@ function handleResponse(response) {
             const error = (data && data.message) || response.statusText;
             return Promise.reject(error);
         }
-
+        
         return data;
     });
 }
