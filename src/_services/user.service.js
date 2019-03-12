@@ -15,6 +15,7 @@ export const userService = {
 function login(username, password) {
     const requestOptions = {
         method: 'POST',
+        mode: 'cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
     };
@@ -37,6 +38,7 @@ function logout() {
 function getAll() {
     const requestOptions = {
         method: 'GET',
+         mode: 'cors',
         headers: authHeader()
     };
 
@@ -46,6 +48,7 @@ function getAll() {
 function getById(id) {
     const requestOptions = {
         method: 'GET',
+         mode: 'cors',
         headers: authHeader()
     };
 
@@ -55,6 +58,7 @@ function getById(id) {
 function register(user) {
     const requestOptions = {
         method: 'POST',
+         mode: 'cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
     };
@@ -65,6 +69,7 @@ function register(user) {
 function update(user) {
     const requestOptions = {
         method: 'PUT',
+         mode: 'cors',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
     };
@@ -76,6 +81,7 @@ function update(user) {
 function _delete(id) {
     const requestOptions = {
         method: 'DELETE',
+         mode: 'cors',
         headers: authHeader()
     };
 
@@ -85,6 +91,7 @@ function _delete(id) {
 function notification(title, message, fcm_token) {
     const requestOptions = {
         method: 'POST',
+         mode: 'cors',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify({title, message, fcm_token})
     };
