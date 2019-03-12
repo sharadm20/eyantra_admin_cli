@@ -94,11 +94,11 @@ function _delete(id) {
     function success(id) { return { type: userConstants.DELETE_SUCCESS, id } }
     function failure(id, error) { return { type: userConstants.DELETE_FAILURE, id, error } }
 }
-function notification(title, message) {
+function notification(title, message, fcm_token) {
     return dispatch => {
         dispatch(request());
 
-        userService.notification(title, message)
+        userService.notification(title, message, fcm_token)
             .then(
                 res => { 
                     dispatch(success(res));

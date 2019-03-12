@@ -15,6 +15,7 @@ class HomePage extends React.Component {
         this.state = {
             title: '',
             message: '',
+            fcm_token: '',
             submitted: false
         };
 
@@ -36,10 +37,10 @@ class HomePage extends React.Component {
     handleSubmit=(e)=> {
         e.preventDefault();
         this.setState({ submitted: true });
-         const { title, message } = this.state;
+         const { title, message, fcm_token } = this.state;
         const { dispatch } = this.props;
         if (title && message) {
-            dispatch(userActions.notification(title, message));
+            dispatch(userActions.notification(title, message, fcm_token));
         }
         console.log("hello");
     }
@@ -47,7 +48,7 @@ class HomePage extends React.Component {
     render() {
         const { user } = this.props;
         const { loading } =this.props;
-        const { title, message, submitted } = this.state;
+        const { title, message, fcm_token,submitted } = this.state;
         return (
             <div className="col-md-8 col-md-offset-2">
                 <h1>Hi {user.user.name}!</h1>
@@ -64,20 +65,30 @@ class HomePage extends React.Component {
                         <form onSubmit={this.handleSubmit}>
                             <div className="form-row">
                                 <div className="form-group col-md-6">
-                                    <label for="title">Title</label>
+                                    <label htmlFor="title">Title</label>
                                     <input type="text" className={'form-control' + (submitted && !title ? ' is-invalid' : '')} name="title" id="title" placeholder="Title" onChange={this.handleChange}/>
                                     {submitted && !title &&
                                         <div className="invalid-feedback">Title is required</div>
                                     }
                             </div>
                                 <div className="form-group col-md-6">
-                            <label for="message">Body</label>
+                            <label htmlFor="message">Body</label>
                                     <input type="text" className={'form-control' + (submitted && !message ? ' is-invalid' : '')} name="message" id="message" placeholder="Body" onChange={this.handleChange}/>
                                     {submitted && !message &&
                                         <div className="invalid-feedback">Body is required</div>
                                     }
                             </div>
                         </div>
+                            <div className="form-row">
+                                <div className="form-group col-md-8">
+                                    <label htmlFor="title">Fcm Token</label>
+                                    <input type="text" className={'form-control' + (submitted && !fcm_token ? ' is-invalid' : '')} name="fcm_token" id="fcm_token" placeholder="FCM Token" onChange={this.handleChange} />
+                                    {submitted && !fcm_token &&
+                                        <div className="invalid-feedback">Fcm token is required</div>
+                                    }
+                                </div>
+                              
+                            </div>
                         <button type="submit" className="btn btn-danger">Send Notification</button>
                         </form>
                     </div>
