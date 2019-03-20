@@ -51,7 +51,7 @@ class HomePage extends React.Component {
         const { title, message, fcm_token,submitted } = this.state;
         return (
             <div className="col-md-8 col-md-offset-2">
-                <h1>Hi {user.user.name}!</h1>
+                <h1>Hi {user.user.firstname}!</h1>
                 <p>You're logged in with eYantra!!</p>
                 <h3>Notification Setting Panel:</h3>
                 <div className="card">
