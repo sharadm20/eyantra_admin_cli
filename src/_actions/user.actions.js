@@ -98,7 +98,7 @@ function notification(title, message, fcm_token) {
     return dispatch => {
         dispatch(request());
 
-        userService.notification(title, message, fcm_token)
+        userService.notification(title, message, fcm_token, screen)
             .then(
                 res => { 
                     dispatch(success(res));

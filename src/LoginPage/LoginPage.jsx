@@ -1,13 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Container, Card,Button, Form,FormGroup, FormControl, FormLabel, Spinner } from 'react-bootstrap';
+import "./Login.css";
 
 import { userActions } from '../_actions';
 
 class LoginPage extends React.Component {
     constructor(props) {
         super(props);
-
+       
         // reset login status
         this.props.dispatch(userActions.logout());
 
@@ -36,37 +38,51 @@ class LoginPage extends React.Component {
             dispatch(userActions.login(username, password));
         }
     }
+ 
+
+
 
     render() {
+ 
         const { loggingIn } = this.props;
         const { username, password, submitted } = this.state;
         return (
-            <div className="col-md-6 col-md-offset-3">
-                <h2>Login</h2>
+            <Container className="Login">
+                <Card>
+                    <Card.Header>Login</Card.Header>
+                <Card.Body>
                 <form name="form" onSubmit={this.handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="username">Username</label>
-                        <input type="text" className={'form-control' + (submitted && !username ? ' is-invalid' : '')} name="username" value={username} onChange={this.handleChange} />
+                     <FormGroup>
+                        <FormLabel>Username</FormLabel>
+                        <FormControl type="text" name="username" value={username} onChange={this.handleChange} isInvalid={submitted && !username} required/>
                         {submitted && !username &&
-                            <div className="invalid-feedback">Username is required</div>
+                            <Form.Control.Feedback type="invalid">Username is invalid</Form.Control.Feedback>
                         }
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input type="password" className={'form-control' + (submitted && !username ? ' is-invalid' : '')} name="password" value={password} onChange={this.handleChange} />
+                    </FormGroup>
+                    <FormGroup>
+                        <FormLabel htmlFor="password">Password</FormLabel>
+                        <FormControl type="password" name="password" value={password} onChange={this.handleChange} isInvalid={submitted && !password} required/>
                         {submitted && !password &&
-                            <div className="invalid-feedback">Password is required</div>
+                            <Form.Control.Feedback type="invalid">Password is invalid</Form.Control.Feedback>
                         }
-                    </div>
-                    <div className="form-group">
-                        <button className="btn btn-primary">Login</button>
+                    </FormGroup>
+                    <FormGroup>
+                        <Button variant="danger" type="submit">Login</Button>
                         {loggingIn &&
-                            <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                            <div>
+                            <Spinner animation="grow" variant="primary" />
+                            <Spinner animation="grow" variant="secondary" />
+                            <Spinner animation="grow" variant="success" />
+                            <Spinner animation="grow" variant="danger" />
+                            <Spinner animation="grow" variant="warning" /></div>
                         }
-                        {/* <Link to="/register" className="btn btn-link">Register</Link> */}
-                    </div>
+                      
+                    </FormGroup> 
+
                 </form>
-            </div>
+               </Card.Body>         
+            </Card> 
+            </Container>
         );
     }
 }

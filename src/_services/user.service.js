@@ -88,12 +88,12 @@ function _delete(id) {
     return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(handleResponse);
 }
 
-function notification(title, message, fcm_token) {
+function notification(title, message, fcm_token, screen) {
     const requestOptions = {
         method: 'POST',
          mode: 'cors',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({title, message, fcm_token})
+        body: JSON.stringify({title, message, fcm_token, screen})
     };
 
     return fetch(`${config.apiUrl}/send`, requestOptions).then(handleResponse);
