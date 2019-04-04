@@ -94,7 +94,7 @@ function _delete(id) {
     function success(id) { return { type: userConstants.DELETE_SUCCESS, id } }
     function failure(id, error) { return { type: userConstants.DELETE_FAILURE, id, error } }
 }
-function notification(title, message, fcm_token) {
+function notification(title, message, fcm_token, screen) {
     return dispatch => {
         dispatch(request());
 
