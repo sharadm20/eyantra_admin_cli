@@ -96,7 +96,7 @@ function notification(title, message, fcm_token, screen) {
         body: JSON.stringify({title, message, fcm_token, screen})
     };
 
-    return fetch(`${config.apiUrl}/send`, requestOptions).then(handleResponse);
+    return fetch(`${config.apiUrl}/notifications/sendtoOne`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {
