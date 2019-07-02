@@ -20,7 +20,7 @@ function login(username, password) {
         body: JSON.stringify({ username, password })
     };
 
-    return fetch(`${config.apiUrl}/users/adminlogin`, requestOptions)
+    return fetch(`${config.apiUrl}/auth`, requestOptions)
         .then(handleResponse)
         .then(user => {
             // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -93,10 +93,10 @@ function notification(title, message, fcm_token, screen) {
         method: 'POST',
          mode: 'cors',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({title, message, fcm_token, screen})
+        body: JSON.stringify({title, message, screen})
     };
 
-    return fetch(`${config.apiUrl}/send`, requestOptions).then(handleResponse);
+    return fetch(`${config.apiUrl}/notifications/send?_token=${fcm_token}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {
