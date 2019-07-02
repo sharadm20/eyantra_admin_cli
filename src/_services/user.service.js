@@ -95,7 +95,6 @@ function notification(title, message, fcm_token, screen) {
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify({title, message, screen})
     };
-
     return fetch(`${config.apiUrl}/notifications/send?_token=${fcm_token}`, requestOptions).then(handleResponse);
 }
 
