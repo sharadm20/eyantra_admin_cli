@@ -5,8 +5,8 @@ import { history } from '../_helpers';
 import { alertActions } from '../_actions';
 import { PrivateRoute } from '../_components';
 import Header from '../_components/Header.jsx';
-import { HomePage } from '../HomePage';
-import { LoginPage } from '../LoginPage';
+import { HomePage } from '../_views/HomePage';
+import { LoginPage } from '../_views/LoginPage';
 import { Toast } from 'react-bootstrap';
 
 class App extends React.Component {

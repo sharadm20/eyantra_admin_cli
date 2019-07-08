@@ -8,6 +8,7 @@ export const userActions = {
     logout,
     register,
     notification,
+    notificationToTopic,
     getAll,
     delete: _delete
 };
@@ -99,6 +100,29 @@ function notification(title, message, fcm_token, screen) {
         dispatch(request());
 
         userService.notification(title, message, fcm_token, screen)
+            .then(
+                res => { 
+                    dispatch(success(res));
+                    dispatch(alertActions.success(res.message));
+                    history.push('/');
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request() { return { type: userConstants.NOTIFICATION_REQUEST} }
+    function success(res) { return { type: userConstants.NOTIFICATION_SUCCESS, res } }
+    function failure(error) { return { type: userConstants.NOTIFICATION_FAILURE, error } }
+}
+
+function notificationToTopic(title, message, topic) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.notificationToTopic(title, message, topic)
             .then(
                 res => { 
                     dispatch(success(res));

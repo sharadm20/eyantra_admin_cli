@@ -8,6 +8,7 @@ export const userService = {
     getAll,
     getById,
     notification,
+    notificationToTopic,
     update,
     delete: _delete
 };
@@ -96,6 +97,16 @@ function notification(title, message, fcm_token, screen) {
         body: JSON.stringify({title, message, screen})
     };
     return fetch(`${config.apiUrl}/notifications/send?_token=${fcm_token}`, requestOptions).then(handleResponse);
+}
+
+function notificationToTopic(title, message, topic) {
+    const requestOptions = {
+        method: 'POST',
+         mode: 'cors',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({title, message})
+    };
+    return fetch(`${config.apiUrl}/notifications/send?_topic=${topic}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {
