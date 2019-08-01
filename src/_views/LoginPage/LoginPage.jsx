@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Container, Card,Button, Form,FormGroup, FormControl, FormLabel, Spinner } from 'react-bootstrap';
 import "./Login.css";
 
-import { userActions } from '../_actions';
+import { userActions } from '../../_actions';
 
 class LoginPage extends React.Component {
     constructor(props) {

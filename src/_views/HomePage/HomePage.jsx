@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Jumbotron, Container, Card } from 'react-bootstrap';
-import { userActions } from '../_actions';
+import { userActions } from '../../_actions';
 import './Home.css';
 class HomePage extends React.Component {
 
@@ -37,7 +37,7 @@ class HomePage extends React.Component {
         if (title && message) {
             dispatch(userActions.notification(title, message, fcm_token, screen));
         }
-        console.log("hello");
+
     }
 
     render() {

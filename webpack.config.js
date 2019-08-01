@@ -3,7 +3,7 @@ var webpack = require('webpack');
 const ASSET_PATH = process.env.ASSET_PATH || '/';
 
 module.exports = {
-    mode: 'development',
+    mode: 'production',
     resolve: {
         extensions: ['.js', '.jsx']
     },
