@@ -8,13 +8,14 @@ import Header from '../_components/Header.jsx';
 import { HomePage } from '../_views/HomePage';
 import { LoginPage } from '../_views/LoginPage';
 import { Toast } from 'react-bootstrap';
+import { NotificationPage } from '../_views/NotificationPage';
+import Sidebar from '../_components/Sidebar';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             showA: true}
-      console.log(JSON.stringify(props))
         const { dispatch } = this.props;
         history.listen((location, action) => {
             // clear alert on location change
@@ -51,11 +52,14 @@ class App extends React.Component {
                                 </Toast>
                         }
                     </div>
-                    <div className="col-sm-8 col-sm-offset-2">
+                    
+                    
+                    <div className="col">
                         
                         <Router history={history}>
                             <div>
                                 <PrivateRoute exact path="/" component={HomePage} />
+                                <PrivateRoute exact path="/notification" component={NotificationPage} />
                                 <Route path="/login" component={LoginPage} />
                              
                             </div>
@@ -74,11 +78,10 @@ class App extends React.Component {
                     </div>
                     </div>
                 </footer>
-            </div>
-      
-        );
+            </div>);
     }
 }
+
 
 function mapStateToProps(state) {
     const { alert, authentication } = state;

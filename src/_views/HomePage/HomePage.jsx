@@ -1,17 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Jumbotron, Container, Card } from 'react-bootstrap';
+import { Jumbotron, Container, Card, Row } from 'react-bootstrap';
 import { userActions } from '../../_actions';
 import './Home.css';
+import Sidebar from '../../_components/Sidebar';
+
 class HomePage extends React.Component {
 
     constructor(props) {
         super(props);
-
-        // reset login status
-        //this.props.dispatch(userActions.logout());
-
         this.state = {
             title: '',
             message: '',
@@ -41,13 +38,18 @@ class HomePage extends React.Component {
     }
 
     render() {
-        const { user } = this.props;
-        const { loading } =this.props;
+        const { user, loading } = this.props;
+        
         const { title, message, fcm_token,submitted, click_action, sound, status, screen } = this.state;
         return (
             <Container className="home">
+            <Row>
+            <div className="col-md-3">            
+            <Sidebar/> 
+            </div>
+
             <Jumbotron className="col-md-8">
-                <h2>Hi {user.firstname}!</h2>
+                <h2>Hi {user.user.firstName}!</h2>
                 <p className="alert alert-primary">You're logged in with eYantra!!</p>
                 <h3>Notification Setting Panel:</h3>
                 <Card bg="dark" text="white">
@@ -104,6 +106,7 @@ class HomePage extends React.Component {
                 </Card>
            
             </Jumbotron>
+            </Row>
         </Container>
         );
     }

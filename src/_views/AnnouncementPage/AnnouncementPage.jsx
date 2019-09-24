@@ -1,17 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Jumbotron, Container, Card, Form } from 'react-bootstrap';
+import { Jumbotron, Container, Card, Row } from 'react-bootstrap';
 import { userActions } from '../../_actions';
-import './Notification.css';
-class NotificationPage extends React.Component {
+import './Announcement.css';
+import Sidebar from '../../_components/Sidebar';
+
+class AnnouncementPage extends React.Component {
 
     constructor(props) {
         super(props);
-
-        // reset login status
-        //this.props.dispatch(userActions.logout());
-
         this.state = {
             title: '',
             message: '',
@@ -32,24 +29,29 @@ class NotificationPage extends React.Component {
     handleSubmit=(e) => {
         e.preventDefault();
         this.setState({ submitted: true });
-         const { title, message, topic } = this.state;
+         const { title, message, fcm_token, click_action, sound, status, screen } = this.state;
         const { dispatch } = this.props;
         if (title && message) {
-            dispatch(userActions.notificationToTopic(title, message, topic));
+            dispatch(userActions.notification(title, message, fcm_token, screen));
         }
-        
+
     }
 
     render() {
-        const { user } = this.props;
-        const { loading } =this.props;
-        const { title, message,topic, submitted } = this.state;
+        const { user, loading } = this.props;
+        
+        const { title, message, fcm_token,submitted, click_action, sound, status, screen } = this.state;
         return (
             <Container className="home">
+            <Row>
+            <div className="col-md-3">            
+            <Sidebar/> 
+            </div>
+
             <Jumbotron className="col-md-8">
-                <h2>Hi {user.firstname}!</h2>
+                <h2>Hi {user.user.firstName}!</h2>
                 <p className="alert alert-primary">You're logged in with eYantra!!</p>
-                <h3>Notification Setting Panel:</h3>
+                <h3>Announcement Setting Panel:</h3>
                 <Card bg="dark" text="white">
                     <Card.Header>
                         Settings
@@ -76,26 +78,26 @@ class NotificationPage extends React.Component {
                             </div>
                         </div>
                             <div className="form-row">
-                                {/* <div className="form-group col-md-8">
-                                    <label htmlFor="title">Topic</label>
-                                    <input type="text" className={'form-control' + (submitted && !topic ? ' is-invalid' : '')} name="topic" id="topic" placeholder="FCM Token" onChange={this.handleChange} />
-                                   
-                                </div> */}
-                                <Form.Group className="col-md-8">
-                                    <Form.Label>Select Topic</Form.Label>
-                                    <Form.Control as="select" className={'form-control' + (submitted && !topic ? ' is-invalid' : '')} name="topic" id="topic">
-                                    <option value="DEFAULT">Default</option>
-                                    <option value="CUSTOM">Custom</option>
-                                
-                                    </Form.Control>
-                                    {submitted && !topic &&
-                                        <div className="invalid-feedback">topic is required</div>
+                                <div className="form-group col-md-8">
+                                    <label htmlFor="title">Fcm Token</label>
+                                    <input type="text" className={'form-control' + (submitted && !fcm_token ? ' is-invalid' : '')} name="fcm_token" id="fcm_token" placeholder="FCM Token" onChange={this.handleChange} />
+                                    {submitted && !fcm_token &&
+                                        <div className="invalid-feedback">Fcm token is required</div>
                                     }
-                                </Form.Group>
+                                </div>
                               
                             </div>
-                  
-                        <button type="submit" className="btn btn-danger">Send Notification</button>
+                             <div className="form-row">
+                                <div className="form-group col-md-8">
+                                    <label htmlFor="title">Screen</label>
+                                    <input type="text" className={'form-control' + (submitted && !screen ? ' is-invalid' : '')} name="screen" id="screen" placeholder="Screen" onChange={this.handleChange} />
+                                    {submitted && !screen &&
+                                        <div className="invalid-feedback">Screen text is required</div>
+                                    }
+                                </div>
+                              
+                            </div>
+                        <button type="submit" className="btn btn-danger">Send Announcement</button>
                         </form>
                     </Card.Body>
                     {loading &&
@@ -104,6 +106,7 @@ class NotificationPage extends React.Component {
                 </Card>
            
             </Jumbotron>
+            </Row>
         </Container>
         );
     }
@@ -117,5 +120,5 @@ function mapStateToProps(state) {
     };
 }
 
-const connectedNotificationPage = connect(mapStateToProps)(NotificationPage);
-export { connectedNotificationPage as NotificationPage };
+const connectedAnnouncementPage = connect(mapStateToProps)(AnnouncementPage);
+export { connectedAnnouncementPage as AnnouncementPage };
