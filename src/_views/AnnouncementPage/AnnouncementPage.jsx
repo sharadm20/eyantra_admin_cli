@@ -1,124 +1,131 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Jumbotron, Container, Card, Row } from 'react-bootstrap';
 import { userActions } from '../../_actions';
+import { bindActionCreators } from 'redux';
 import './Announcement.css';
-import Sidebar from '../../_components/Sidebar';
+import { Spinner } from 'react-bootstrap';
+import AnnouncementCard from './AnnouncementCard';
+import Pagination from '../../_components/Pagination';
 
 class AnnouncementPage extends React.Component {
 
     constructor(props) {
         super(props);
+        this.shouldComponentRender = this.shouldComponentRender.bind(this);
         this.state = {
-            title: '',
-            message: '',
-            fcm_token: '',
-            click_action:'',
-            sound:'',
-            status:'',
-            screen:'',
+            announcements: [], announcement: [], currentPage: null, totalPages: null,
             submitted: false
         };
+    }
+
+    componentWillMount() {
+        const {getAllAnnouncement} = this.props;
+        getAllAnnouncement();
+    }
+
+    shouldComponentRender() {
+        const {loading} = this.props;
+        if(loading === false) return true;
+        if (typeof loading === undefined) return true;
+        return false;
     }
 
     handleChange=(e) => {
         const { name, value } = e.target;
         this.setState({ [name]: value });
     }
+
+    onPageChanged = data => {
+        const { announcements } = this.state;
+        const { currentPage, totalPages, pageLimit } = data;
+        const offset = (currentPage - 1) * pageLimit;
+        const announcement = announcements.slice(offset, offset + pageLimit);
+    
+        this.setState({ currentPage, announcement, totalPages });
+      }
  
     handleSubmit=(e) => {
-        e.preventDefault();
-        this.setState({ submitted: true });
-         const { title, message, fcm_token, click_action, sound, status, screen } = this.state;
-        const { dispatch } = this.props;
-        if (title && message) {
-            dispatch(userActions.notification(title, message, fcm_token, screen));
-        }
+        //e.preventDefault();
+        console.log('chal gaya')
+        // this.setState({ submitted: true });
+        //  const { title, subText, imageUrl, color, textColor, body, type } = this.state;
+        // const { dispatch } = this.props;
+        
+        // if (title && type=='IMAGE') {
+        //     dispatch(userActions.addAnnouncementImage(title, body, imageUrl, type, subText));
+        // }
+
+        // if (title && type=='TEXT') {
+        //     console.log('handle submit');
+        //     dispatch(userActions.addAnnouncementText(title, body, color, textColor, type, subText));
+        // }
 
     }
 
     render() {
-        const { user, loading } = this.props;
-        
-        const { title, message, fcm_token,submitted, click_action, sound, status, screen } = this.state;
-        return (
-            <Container className="home">
-            <Row>
-            <div className="col-md-3">            
-            <Sidebar/> 
-            </div>
 
-            <Jumbotron className="col-md-8">
-                <h2>Hi {user.user.firstName}!</h2>
-                <p className="alert alert-primary">You're logged in with eYantra!!</p>
-                <h3>Announcement Setting Panel:</h3>
-                <Card bg="dark" text="white">
-                    <Card.Header>
-                        Settings
-                    </Card.Header>
-                    <Card.Body>
-                        {/* <h5 className="card-title">Special title treatment</h5>
-                        <p className="card-text">With supporting text below as a natural lead-in to additional content.</p> */}
-                        {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
-                        <form onSubmit={this.handleSubmit}>
-                            <div className="form-row">
-                                <div className="form-group col-md-6">
-                                    <label htmlFor="title">Title</label>
-                                    <input type="text" className={'form-control' + (submitted && !title ? ' is-invalid' : '')} name="title" id="title" placeholder="Title" onChange={this.handleChange}/>
-                                    {submitted && !title &&
-                                        <div className="invalid-feedback">Title is required</div>
-                                    }
-                            </div>
-                                <div className="form-group col-md-6">
-                            <label htmlFor="message">Body</label>
-                                    <input type="text" className={'form-control' + (submitted && !message ? ' is-invalid' : '')} name="message" id="message" placeholder="Body" onChange={this.handleChange}/>
-                                    {submitted && !message &&
-                                        <div className="invalid-feedback">Body is required</div>
-                                    }
-                            </div>
-                        </div>
-                            <div className="form-row">
-                                <div className="form-group col-md-8">
-                                    <label htmlFor="title">Fcm Token</label>
-                                    <input type="text" className={'form-control' + (submitted && !fcm_token ? ' is-invalid' : '')} name="fcm_token" id="fcm_token" placeholder="FCM Token" onChange={this.handleChange} />
-                                    {submitted && !fcm_token &&
-                                        <div className="invalid-feedback">Fcm token is required</div>
-                                    }
-                                </div>
-                              
-                            </div>
-                             <div className="form-row">
-                                <div className="form-group col-md-8">
-                                    <label htmlFor="title">Screen</label>
-                                    <input type="text" className={'form-control' + (submitted && !screen ? ' is-invalid' : '')} name="screen" id="screen" placeholder="Screen" onChange={this.handleChange} />
-                                    {submitted && !screen &&
-                                        <div className="invalid-feedback">Screen text is required</div>
-                                    }
-                                </div>
-                              
-                            </div>
-                        <button type="submit" className="btn btn-danger">Send Announcement</button>
-                        </form>
-                    </Card.Body>
-                    {loading &&
-                        <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                    }
-                </Card>
-           
-            </Jumbotron>
-            </Row>
-        </Container>
+        
+       
+        const { announcement, currentPage, totalPages } = this.state;
+        let totalAnnouncement =0;
+      
+        if(!this.shouldComponentRender()) return (<Spinner animation="border" role="status">
+        <span className="sr-only">Loading...</span>
+      </Spinner>);
+      const { items } = this.props;
+        totalAnnouncement = items?items.length:0;
+        if (totalAnnouncement === 0) return null;
+    
+        const headerClass = ['text-dark py-2 pr-4 m-0', currentPage ? 'border-gray border-right' : ''].join(' ').trim();
+    
+        return (
+          <div className="container mb-5">
+            <div className="row d-flex flex-row py-5">
+    
+              <div className="w-100 px-4 py-5 d-flex flex-row flex-wrap align-items-center justify-content-between">
+                <div className="d-flex flex-row align-items-center">
+    
+                  <h2 className={headerClass}>
+                    <strong className="text-secondary">{totalAnnouncement}</strong> Announcements
+                  </h2>
+    
+                  { currentPage && (
+                    <span className="current-page d-inline-block h-100 pl-4 text-secondary">
+                      Page <span className="font-weight-bold">{ currentPage }</span> / <span className="font-weight-bold">{ totalPages }</span>
+                    </span>
+                  ) }
+    
+                </div>
+    
+                <div className="d-flex flex-row py-4 align-items-center">
+                  <Pagination totalRecords={totalAnnouncement} pageLimit={18} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+                </div>
+              </div>
+    
+              { items.map(announcement => <AnnouncementCard key={announcement.id} announcement={announcement} handleSubmit={this.handleSubmit} />) }
+    
+            </div>
+          </div>
         );
-    }
+      }
 }
 
 function mapStateToProps(state) {
-    const {  authentication } = state;
+    const {  authentication, announcements } = state;
     const { user } = authentication;
+    const { loading } = announcements;
+     const {items} =announcements;
+     
     return {
-        user
+        user,
+        items,
+        loading
     };
 }
 
-const connectedAnnouncementPage = connect(mapStateToProps)(AnnouncementPage);
+const mapDispatchToProps = dispatch => bindActionCreators({
+    getAllAnnouncement: userActions.getAllAnnouncement
+}, dispatch)
+
+const connectedAnnouncementPage = connect(mapStateToProps, mapDispatchToProps)(AnnouncementPage);
 export { connectedAnnouncementPage as AnnouncementPage };

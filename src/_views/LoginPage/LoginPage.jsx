@@ -47,7 +47,7 @@ class LoginPage extends React.Component {
         const { loggingIn } = this.props;
         const { username, password, submitted } = this.state;
         return (
-            <Container className="Login">
+            <div className="Login">
                 <Card>
                     <Card.Header>Login</Card.Header>
                 <Card.Body>
@@ -82,7 +82,7 @@ class LoginPage extends React.Component {
                 </form>
                </Card.Body>         
             </Card> 
-            </Container>
+            </div>
         );
     }
 }

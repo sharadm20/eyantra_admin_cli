@@ -9,6 +9,9 @@ export const userActions = {
     register,
     notification,
     notificationToTopic,
+    addAnnouncementImage,
+    addAnnouncementText,
+    getAllAnnouncement,
     getAll,
     delete: _delete
 };
@@ -36,8 +39,11 @@ function login(username, password) {
 }
 
 function logout() {
+    return dispatch => {
     userService.logout();
+    dispatch(alertActions.error("User is logout"));
     return { type: userConstants.LOGOUT };
+    };
 }
 
 function register(user) {
@@ -139,4 +145,73 @@ function notificationToTopic(title, message, topic) {
     function request() { return { type: userConstants.NOTIFICATION_REQUEST} }
     function success(res) { return { type: userConstants.NOTIFICATION_SUCCESS, res } }
     function failure(error) { return { type: userConstants.NOTIFICATION_FAILURE, error } }
+}
+
+function addAnnouncementText(title, body, color, textColor, type, subText) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.addAnnouncementText(title, body, color, textColor, type, subText)
+            .then(
+                res => { 
+                    dispatch(success(res));
+                    dispatch(alertActions.success(res.message));
+                    
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request() { return { type: userConstants.ANNOUNCEMENT_REQUEST} }
+    function success(res) { return { type: userConstants.ANNOUNCEMENT_SUCCESS, res } }
+    function failure(error) { return { type: userConstants.ANNOUNCEMENT_FAILURE, error } }
+}
+
+function addAnnouncementImage(title, body, imageUrl, type, subText) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.addAnnouncementImage(title, body, imageUrl, type, subText)
+            .then(
+                res => { 
+                    dispatch(success(res));
+                    dispatch(alertActions.success(res.message));
+                    
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request() { return { type: userConstants.ANNOUNCEMENT_REQUEST} }
+    function success(res) { return { type: userConstants.ANNOUNCEMENT_SUCCESS, res } }
+    function failure(error) { return { type: userConstants.ANNOUNCEMENT_FAILURE, error } }
+}
+
+function getAllAnnouncement() {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getAllAnnouncement()
+            .then(
+                announcements => { 
+                    dispatch(success(announcements));
+                    history.push('/announcement');
+                    
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request() { return { type: userConstants.ANNOUNCEMENT_REQUEST} }
+    function success(announcements) { return { type: userConstants.ANNOUNCEMENTS_FETCH_SUCCESS, announcements } }
+    function failure(error) { return { type: userConstants.ANNOUNCEMENT_FAILURE, error } }
 }

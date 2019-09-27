@@ -9,6 +9,7 @@ class HomePage extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log(props)
         this.state = {
             title: '',
             message: '',
@@ -20,6 +21,7 @@ class HomePage extends React.Component {
             submitted: false
         };
     }
+ 
 
     handleChange=(e) => {
         const { name, value } = e.target;
@@ -44,9 +46,9 @@ class HomePage extends React.Component {
         return (
             <Container className="home">
             <Row>
-            <div className="col-md-3">            
+            {/* <div className="col-md-3">            
             <Sidebar/> 
-            </div>
+            </div> */}
 
             <Jumbotron className="col-md-8">
                 <h2>Hi {user.user.firstName}!</h2>

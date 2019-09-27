@@ -1,16 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Jumbotron, Container, Card, Form } from 'react-bootstrap';
+import { Jumbotron, Container, Card, Form, Row } from 'react-bootstrap';
 import { userActions } from '../../_actions';
 import './Notification.css';
+import Sidebar from '../../_components/Sidebar';
 class NotificationPage extends React.Component {
 
     constructor(props) {
         super(props);
-
-        // reset login status
-        //this.props.dispatch(userActions.logout());
 
         this.state = {
             title: '',
@@ -45,7 +43,10 @@ class NotificationPage extends React.Component {
         const { loading } =this.props;
         const { title, message,topic, submitted } = this.state;
         return (
-            <Container className="home">
+            <Row>
+            {/* <div className="col-md-3">            
+            <Sidebar/> 
+            </div>  */}
             <Jumbotron className="col-md-8">
                 <h2>Hi {user.firstname}!</h2>
                 <p className="alert alert-primary">You're logged in with eYantra!!</p>
@@ -104,7 +105,8 @@ class NotificationPage extends React.Component {
                 </Card>
            
             </Jumbotron>
-        </Container>
+            </Row> 
+        
         );
     }
 }

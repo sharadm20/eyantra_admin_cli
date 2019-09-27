@@ -9,6 +9,9 @@ export const userService = {
     getById,
     notification,
     notificationToTopic,
+    addAnnouncementImage,
+    addAnnouncementText,
+    getAllAnnouncement,
     update,
     delete: _delete
 };
@@ -107,6 +110,34 @@ function notificationToTopic(title, message, topic) {
         body: JSON.stringify({title, message})
     };
     return fetch(`${config.apiUrl}/notifications/send?_topic=${topic}`, requestOptions).then(handleResponse);
+}
+
+function addAnnouncementText(title, body, color, textColor, type, subText) {
+    const requestOptions = {
+        method: 'POST',
+         mode: 'cors',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({title, body, color, textColor, type, subText})
+    };
+    return fetch(`${config.apiUrl}/announce`, requestOptions).then(handleResponse);
+}
+
+function addAnnouncementImage(title, body, imageUrl, type, subText) {
+    const requestOptions = {
+        method: 'POST',
+         mode: 'cors',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({title, body, imageUrl, type, subText})
+    };
+    return fetch(`${config.apiUrl}/announce`, requestOptions).then(handleResponse);
+}
+function getAllAnnouncement() {
+    const requestOptions = {
+        method: 'GET',
+         mode: 'cors',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' }
+    };
+    return fetch(`${config.apiUrl}/announce/all`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

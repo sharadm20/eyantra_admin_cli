@@ -1,16 +1,23 @@
 import React from 'react';
 import { Nav } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 
-function Sidebar() {
-    
-        return (
-            
-        <Nav variant="pills" defaultActiveKey="/" className="flex-column">
-            <Nav.Link href="/" activeClassName="active">Home</Nav.Link>
-            <Nav.Link href="/notification" activeClassName="active">Notification</Nav.Link>
-        </Nav>
-          );
-        }
-
+class Sidebar extends React.Component {
+  constructor(props) {
+    super(props);
+    //console.log(this.props.location.pathname)
+  }
+  render() {
+    if(this.props.loggedIn)
+    return (
+        
+    <Nav variant="pills" className="flex-column">
+        <Nav.Link exact={true} href="/" activeClassName="active">Home</Nav.Link>
+        <Nav.Link  href="/notification" activeClassName="active">Send Notification</Nav.Link>
+        <Nav.Link  href="/announcement" activeClassName="active">Edit and Save Announcement</Nav.Link>
+    </Nav>
+      );
+  
+  return null    
+  }
+}
 export default Sidebar;
