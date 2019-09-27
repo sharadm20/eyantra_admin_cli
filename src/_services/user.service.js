@@ -12,6 +12,8 @@ export const userService = {
     addAnnouncementImage,
     addAnnouncementText,
     getAllAnnouncement,
+    editAnnouncement,
+    deleteAnnouncement,
     update,
     delete: _delete
 };
@@ -131,6 +133,18 @@ function addAnnouncementImage(title, body, imageUrl, type, subText) {
     };
     return fetch(`${config.apiUrl}/announce`, requestOptions).then(handleResponse);
 }
+function editAnnouncement(announcement) {
+   
+        const requestOptions = {
+            method: 'PUT',
+             mode: 'cors',
+            headers: { ...authHeader(), 'Content-Type': 'application/json' },
+            body: JSON.stringify(announcement)
+        };
+        return fetch(`${config.apiUrl}/announce`, requestOptions).then(handleResponse);
+    
+}
+
 function getAllAnnouncement() {
     const requestOptions = {
         method: 'GET',
@@ -138,6 +152,16 @@ function getAllAnnouncement() {
         headers: { ...authHeader(), 'Content-Type': 'application/json' }
     };
     return fetch(`${config.apiUrl}/announce/all`, requestOptions).then(handleResponse);
+}
+
+function deleteAnnouncement(id) {
+    const requestOptions = {
+        method: 'DELETE',
+         mode: 'cors',
+        headers: authHeader()
+    };
+
+    return fetch(`${config.apiUrl}/announce/${id}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

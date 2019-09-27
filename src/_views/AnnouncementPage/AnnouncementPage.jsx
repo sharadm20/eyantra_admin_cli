@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { connect } from 'react-redux';
 import { userActions } from '../../_actions';
 import { bindActionCreators } from 'redux';
 import './Announcement.css';
-import { Spinner } from 'react-bootstrap';
+import { Spinner, Button, Modal } from 'react-bootstrap';
 import AnnouncementCard from './AnnouncementCard';
 import Pagination from '../../_components/Pagination';
 
@@ -11,23 +11,24 @@ class AnnouncementPage extends React.Component {
 
     constructor(props) {
         super(props);
-        this.shouldComponentRender = this.shouldComponentRender.bind(this);
+        
         this.state = {
-            announcements: [], announcement: [], currentPage: null, totalPages: null,
+            announcements: [], announcement: [],formData: [], currentPage: null, totalPages: null,
             submitted: false
         };
     }
 
-    componentWillMount() {
+    componentWillMount=()=> {
         const {getAllAnnouncement} = this.props;
         getAllAnnouncement();
     }
 
-    shouldComponentRender() {
+    shouldComponentRender=() =>{
         const {loading} = this.props;
-        if(loading === false) return true;
-        if (typeof loading === undefined) return true;
-        return false;
+       
+        if(loading === false) return true
+        else if (typeof loading === undefined) return true;
+        else if(loading === true) return false;
     }
 
     handleChange=(e) => {
@@ -45,34 +46,26 @@ class AnnouncementPage extends React.Component {
       }
  
     handleSubmit=(e) => {
-        //e.preventDefault();
-        console.log('chal gaya')
-        // this.setState({ submitted: true });
-        //  const { title, subText, imageUrl, color, textColor, body, type } = this.state;
-        // const { dispatch } = this.props;
-        
-        // if (title && type=='IMAGE') {
-        //     dispatch(userActions.addAnnouncementImage(title, body, imageUrl, type, subText));
-        // }
-
-        // if (title && type=='TEXT') {
-        //     console.log('handle submit');
-        //     dispatch(userActions.addAnnouncementText(title, body, color, textColor, type, subText));
-        // }
-
+          this.setState({formData:this.state.formData.push(e)})
+           this.props.editAnnouncement(this.state.formData);
+           this.componentWillMount()
     }
+    handleDelete=(id) => {
+       console.log(id)
+       this.props.deleteAnnouncement(id);
+}
+
+ 
+
 
     render() {
-
-        
-       
-        const { announcement, currentPage, totalPages } = this.state;
+        const {  currentPage, totalPages, announcements } = this.state;
         let totalAnnouncement =0;
       
         if(!this.shouldComponentRender()) return (<Spinner animation="border" role="status">
         <span className="sr-only">Loading...</span>
       </Spinner>);
-      const { items } = this.props;
+        const { items } = this.props;
         totalAnnouncement = items?items.length:0;
         if (totalAnnouncement === 0) return null;
     
@@ -87,6 +80,7 @@ class AnnouncementPage extends React.Component {
     
                   <h2 className={headerClass}>
                     <strong className="text-secondary">{totalAnnouncement}</strong> Announcements
+                   <AnnouncementModal />
                   </h2>
     
                   { currentPage && (
@@ -102,12 +96,42 @@ class AnnouncementPage extends React.Component {
                 </div>
               </div>
     
-              { items.map(announcement => <AnnouncementCard key={announcement.id} announcement={announcement} handleSubmit={this.handleSubmit} />) }
+              { items.map(announcement => <AnnouncementCard key={announcement.id} announcement={announcement} handleSubmit={this.handleSubmit} handleDelete={this.handleDelete}/>) }
     
             </div>
           </div>
         );
       }
+}
+
+function AnnouncementModal() {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  return (
+    <>
+      <Button variant="primary" onClick={handleShow}>
+        Add Announcement
+      </Button>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Announcement</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>will get to you soon</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 }
 
 function mapStateToProps(state) {
@@ -124,7 +148,9 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    getAllAnnouncement: userActions.getAllAnnouncement
+    getAllAnnouncement: userActions.getAllAnnouncement,
+    editAnnouncement: userActions.editAnnouncement,
+    deleteAnnouncement: userActions.deleteAnnouncement
 }, dispatch)
 
 const connectedAnnouncementPage = connect(mapStateToProps, mapDispatchToProps)(AnnouncementPage);

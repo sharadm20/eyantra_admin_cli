@@ -12,6 +12,8 @@ export const userActions = {
     addAnnouncementImage,
     addAnnouncementText,
     getAllAnnouncement,
+    editAnnouncement,
+    deleteAnnouncement,
     getAll,
     delete: _delete
 };
@@ -193,6 +195,29 @@ function addAnnouncementImage(title, body, imageUrl, type, subText) {
     function failure(error) { return { type: userConstants.ANNOUNCEMENT_FAILURE, error } }
 }
 
+function editAnnouncement(announcement) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.editAnnouncement(announcement)
+            .then(
+                res => { 
+                    dispatch(success(res));
+                    dispatch(alertActions.success(res.message));
+                    
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request() { return { type: userConstants.EDIT_ANNOUNCEMENT_REQUEST} }
+    function success(res) { return { type: userConstants.EDIT_ANNOUNCEMENT_SUCCESS, res } }
+    function failure(error) { return { type: userConstants.EDIT_ANNOUNCEMENT_FAILURE, error } }
+}
+
 function getAllAnnouncement() {
     return dispatch => {
         dispatch(request());
@@ -214,4 +239,19 @@ function getAllAnnouncement() {
     function request() { return { type: userConstants.ANNOUNCEMENT_REQUEST} }
     function success(announcements) { return { type: userConstants.ANNOUNCEMENTS_FETCH_SUCCESS, announcements } }
     function failure(error) { return { type: userConstants.ANNOUNCEMENT_FAILURE, error } }
+}
+function deleteAnnouncement(id) {
+    return dispatch => {
+        dispatch(request(id));
+
+        userService.deleteAnnouncement(id)
+            .then(
+                res => dispatch(success(res.data)),
+                error => dispatch(failure(id, error.toString()))
+            );
+    };
+
+    function request(id) { return { type: userConstants.DELETE_ANNOUNCEMENT_REQUEST, id } }
+    function success(id) { return { type: userConstants.DELETE_ANNOUNCEMENT_SUCCESS, id } }
+    function failure(id, error) { return { type: userConstants.DELETE_ANNOUNCEMENT_FAILURE, id, error } }
 }

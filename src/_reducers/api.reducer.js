@@ -30,9 +30,46 @@ function announcements(state = {}, action) {
       case userConstants.ANNOUNCEMENTS_FETCH_SUCCESS:
         // console.log('here')
       return  {items: action.announcements.data, loading: false};
-
     case userConstants.ANNOUNCEMENT_FAILURE:
       return {};
+      case userConstants.EDIT_ANNOUNCEMENT_REQUEST:
+      return { editing: true };
+    case userConstants.EDIT_ANNOUNCEMENT_SUCCESS:
+      return {};
+    case userConstants.EDIT_ANNOUNCEMENT_FAILURE:
+      return {};
+      case userConstants.DELETE_ANNOUNCEMENT_REQUEST:
+      // add 'deleting:true' property to user being deleted
+      return {
+        ...state,
+        items: state.items.map(announcement =>
+          announcement.id === action.id
+            ? { ...announcement, deleting: true }
+            : announcement
+        )
+      };
+    case userConstants.DELETE_ANNOUNCEMENT_SUCCESS:
+      // remove deleted user from state
+      console.log(action.id)
+      return {
+        loading: false,
+        items: state.items.filter(announcement => announcement.id !== action.id)
+      };
+    case userConstants.DELETE_ANNOUNCEMENT_FAILURE:
+      // remove 'deleting:true' property and add 'deleteError:[error]' property to user 
+      return {
+        ...state,
+        items: state.items.map(announcement => {
+          if (announcement.id === action.id) {
+            // make copy of announcement without 'deleting:true' property
+            const { deleting, ...announcementCopy } = announcement;
+            // return copy of user with 'deleteError:[error]' property
+            return { ...announcementCopy, deleteError: action.error };
+          }
+
+          return announcement;
+        })
+      };
     default:
       return state
   }
