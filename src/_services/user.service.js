@@ -14,6 +14,9 @@ export const userService = {
     getAllAnnouncement,
     editAnnouncement,
     deleteAnnouncement,
+    getAllCalendar,
+    getAllLab,
+    getAllTalk,
     update,
     delete: _delete
 };
@@ -162,6 +165,32 @@ function deleteAnnouncement(id) {
     };
 
     return fetch(`${config.apiUrl}/announce/${id}`, requestOptions).then(handleResponse);
+}
+
+function getAllCalendar() {
+    const requestOptions = {
+        method: 'GET',
+         mode: 'cors',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' }
+    };
+    return fetch(`${config.apiUrl}/calendars`, requestOptions).then(handleResponse);
+}
+
+function getAllLab() {
+    const requestOptions = {
+        method: 'GET',
+         mode: 'cors',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' }
+    };
+    return fetch(`${config.apiUrl}/labs`, requestOptions).then(handleResponse);
+}
+function getAllTalk() {
+    const requestOptions = {
+        method: 'GET',
+         mode: 'cors',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' }
+    };
+    return fetch(`${config.apiUrl}/talks`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

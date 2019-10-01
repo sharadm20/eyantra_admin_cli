@@ -7,12 +7,15 @@ import { HomePage } from '../_views/HomePage';
 import { LoginPage } from '../_views/LoginPage';
 import { NotificationPage } from '../_views/NotificationPage';
 import { AnnouncementPage } from '../_views/AnnouncementPage';
+import { CalendarPage } from '../_views/CalendarEventPage';
+import { LabPage } from '../_views/LabPage';
+import { TalkPage } from '../_views/TalkPage';
 import { DefaultLayout, DashboardLayout } from '../_layouts';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
-
+        
     }
     renderWithDefaultLayout(Component, Layout){
         return <Layout><Component /></Layout>
@@ -28,6 +31,9 @@ class App extends React.Component {
             <Route exact path='/' render={() => this.renderWithDashboardLayout(this.path, HomePage, DashboardLayout)} />
             <Route path='/notification' render={() => this.renderWithDashboardLayout(this.path, NotificationPage, DashboardLayout)} />
             <Route path='/announcement' render={() => this.renderWithDashboardLayout(this.path, AnnouncementPage, DashboardLayout)} />
+            <Route path='/calendar' render={() => this.renderWithDashboardLayout(this.path, CalendarPage, DashboardLayout)} />
+            <Route path='/lab' render={() => this.renderWithDashboardLayout(this.path, LabPage, DashboardLayout)} />
+            <Route path='/talk' render={() => this.renderWithDashboardLayout(this.path, TalkPage, DashboardLayout)} />
             <Route path='/login' render={() => this.renderWithDefaultLayout(LoginPage, DefaultLayout)} />
             </Switch>
         </Router>    

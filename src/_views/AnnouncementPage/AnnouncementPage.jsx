@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { userActions } from '../../_actions';
 import { bindActionCreators } from 'redux';
 import './Announcement.css';
-import { Spinner, Button, Modal } from 'react-bootstrap';
+import { Spinner, CardColumns } from 'react-bootstrap';
 import AnnouncementCard from './AnnouncementCard';
 import Pagination from '../../_components/Pagination';
+import AnnouncementModal from './AnnouncementModal';
 
 class AnnouncementPage extends React.Component {
 
@@ -37,12 +38,12 @@ class AnnouncementPage extends React.Component {
     }
 
     onPageChanged = data => {
-        const { announcements } = this.state;
+        const { items } = this.props;
         const { currentPage, totalPages, pageLimit } = data;
         const offset = (currentPage - 1) * pageLimit;
-        const announcement = announcements.slice(offset, offset + pageLimit);
+        const announcements = items.slice(offset, offset + pageLimit);
     
-        this.setState({ currentPage, announcement, totalPages });
+        this.setState({ currentPage, announcements, totalPages });
       }
  
     handleSubmit=(e) => {
@@ -50,6 +51,18 @@ class AnnouncementPage extends React.Component {
            this.props.editAnnouncement(this.state.formData);
            this.componentWillMount()
     }
+    addAnnouncement=(e) => {
+      const { addAnnouncementImage, addAnnouncementText } = this.props;
+      
+      if ( e.type=='IMAGE') {
+          addAnnouncementImage(e.title, e.body, e.imageUrl, e.type, e.subText);
+      }
+      if (e.type=='TEXT') {
+          
+          addAnnouncementText(e.title, e.body, e.color, e.textColor, e.type, e.subText);
+      }
+      
+  }
     handleDelete=(id) => {
        console.log(id)
        this.props.deleteAnnouncement(id);
@@ -80,7 +93,7 @@ class AnnouncementPage extends React.Component {
     
                   <h2 className={headerClass}>
                     <strong className="text-secondary">{totalAnnouncement}</strong> Announcements
-                   <AnnouncementModal />
+                    <AnnouncementModal handleSubmit={this.addAnnouncement} />
                   </h2>
     
                   { currentPage && (
@@ -92,46 +105,16 @@ class AnnouncementPage extends React.Component {
                 </div>
     
                 <div className="d-flex flex-row py-4 align-items-center">
-                  <Pagination totalRecords={totalAnnouncement} pageLimit={18} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+                  <Pagination totalRecords={totalAnnouncement} pageLimit={9} pageNeighbours={1} onPageChanged={this.onPageChanged} />
                 </div>
               </div>
-    
-              { items.map(announcement => <AnnouncementCard key={announcement.id} announcement={announcement} handleSubmit={this.handleSubmit} handleDelete={this.handleDelete}/>) }
-    
+              <CardColumns>
+              { announcements.map(announcement => <AnnouncementCard key={announcement.id} announcement={announcement} handleSubmit={this.handleSubmit} handleDelete={this.handleDelete}/>) }
+              </CardColumns>       
             </div>
           </div>
         );
       }
-}
-
-function AnnouncementModal() {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  return (
-    <>
-      <Button variant="primary" onClick={handleShow}>
-        Add Announcement
-      </Button>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Announcement</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>will get to you soon</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
 }
 
 function mapStateToProps(state) {
@@ -149,6 +132,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     getAllAnnouncement: userActions.getAllAnnouncement,
+    addAnnouncementImage: userActions.addAnnouncementImage,
+    addAnnouncementText: userActions.addAnnouncementText,
     editAnnouncement: userActions.editAnnouncement,
     deleteAnnouncement: userActions.deleteAnnouncement
 }, dispatch)

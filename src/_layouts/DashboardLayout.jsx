@@ -39,7 +39,7 @@ class DashboardLayout extends React.Component {
                             <Toast className={`${alert.type}`} show={showA} onClose={toggleShowA} style={{
                                 position: 'absolute',
                                 top: 0,
-                                right: 0,
+                                right: 10,
                               }}>
                                 <Toast.Header>
                                     <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
@@ -51,7 +51,7 @@ class DashboardLayout extends React.Component {
                         }
                         <Row className="justify-content-md-center">
                         <Col md={3} xs={3} lg={3}><Sidebar loggedIn={authentication.loggedIn} /> </Col>
-                        <Col md={{span:8, offset:1}} xs={{span:8, offset:1}} lg={{span:8, offset:1}}>
+                        <Col md={8} xs={8} lg={8}>
                             {this.props.children}
                         </Col>             
                                           

@@ -15,6 +15,9 @@ export const userActions = {
     editAnnouncement,
     deleteAnnouncement,
     getAll,
+    getAllCalendar,
+    getAllLab,
+    getAllTalk,
     delete: _delete
 };
 
@@ -156,7 +159,7 @@ function addAnnouncementText(title, body, color, textColor, type, subText) {
         userService.addAnnouncementText(title, body, color, textColor, type, subText)
             .then(
                 res => { 
-                    dispatch(success(res));
+                    dispatch(success(res.data));
                     dispatch(alertActions.success(res.message));
                     
                 },
@@ -168,7 +171,7 @@ function addAnnouncementText(title, body, color, textColor, type, subText) {
     };
 
     function request() { return { type: userConstants.ANNOUNCEMENT_REQUEST} }
-    function success(res) { return { type: userConstants.ANNOUNCEMENT_SUCCESS, res } }
+    function success(announcement) { return { type: userConstants.ANNOUNCEMENT_SUCCESS, announcement } }
     function failure(error) { return { type: userConstants.ANNOUNCEMENT_FAILURE, error } }
 }
 
@@ -179,7 +182,7 @@ function addAnnouncementImage(title, body, imageUrl, type, subText) {
         userService.addAnnouncementImage(title, body, imageUrl, type, subText)
             .then(
                 res => { 
-                    dispatch(success(res));
+                    dispatch(success(res.data));
                     dispatch(alertActions.success(res.message));
                     
                 },
@@ -191,7 +194,7 @@ function addAnnouncementImage(title, body, imageUrl, type, subText) {
     };
 
     function request() { return { type: userConstants.ANNOUNCEMENT_REQUEST} }
-    function success(res) { return { type: userConstants.ANNOUNCEMENT_SUCCESS, res } }
+    function success(announcement) { return { type: userConstants.ANNOUNCEMENT_SUCCESS, announcement } }
     function failure(error) { return { type: userConstants.ANNOUNCEMENT_FAILURE, error } }
 }
 
@@ -204,7 +207,7 @@ function editAnnouncement(announcement) {
                 res => { 
                     dispatch(success(res));
                     dispatch(alertActions.success(res.message));
-                    
+                    history.push('/announcement');
                 },
                 error => {
                     dispatch(failure(error.toString()));
@@ -236,9 +239,9 @@ function getAllAnnouncement() {
             );
     };
 
-    function request() { return { type: userConstants.ANNOUNCEMENT_REQUEST} }
+    function request() { return { type: userConstants.ANNOUNCEMENTS_FETCH_REQUEST} }
     function success(announcements) { return { type: userConstants.ANNOUNCEMENTS_FETCH_SUCCESS, announcements } }
-    function failure(error) { return { type: userConstants.ANNOUNCEMENT_FAILURE, error } }
+    function failure(error) { return { type: userConstants.ANNOUNCEMENTS_FETCH_FAILURE, error } }
 }
 function deleteAnnouncement(id) {
     return dispatch => {
@@ -254,4 +257,74 @@ function deleteAnnouncement(id) {
     function request(id) { return { type: userConstants.DELETE_ANNOUNCEMENT_REQUEST, id } }
     function success(id) { return { type: userConstants.DELETE_ANNOUNCEMENT_SUCCESS, id } }
     function failure(id, error) { return { type: userConstants.DELETE_ANNOUNCEMENT_FAILURE, id, error } }
+}
+
+
+function getAllCalendar() {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getAllCalendar()
+            .then(
+                calendars => { 
+                    dispatch(success(calendars));
+                    history.push('/calendar');
+                    
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request() { return { type: userConstants.CALENDAR_REQUEST} }
+    function success(calendars) { return { type: userConstants.CALENDAR_SUCCESS, calendars } }
+    function failure(error) { return { type: userConstants.CALENDAR_FAILURE, error } }
+}
+
+function getAllLab() {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getAllLab()
+            .then(
+                labs => { 
+                    dispatch(success(labs));
+                    history.push('/lab');
+                    
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request() { return { type: userConstants.LAB_REQUEST} }
+    function success(labs) { return { type: userConstants.LAB_SUCCESS, labs } }
+    function failure(error) { return { type: userConstants.LAB_FAILURE, error } }
+}
+
+function getAllTalk() {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getAllTalk()
+            .then(
+                talks => { 
+                    dispatch(success(talks));
+                    history.push('/talk');
+                    
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request() { return { type: userConstants.TALK_REQUEST} }
+    function success(talks) { return { type: userConstants.TALK_SUCCESS, talks } }
+    function failure(error) { return { type: userConstants.TALK_FAILURE, error } }
 }

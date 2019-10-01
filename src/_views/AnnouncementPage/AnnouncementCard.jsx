@@ -59,7 +59,7 @@ onDelete=()=>{
    const { id, title, subText, color, textColor, body, imageUrl, type, editing , submitted } = this.state;
     if(!editing)   
     return (
-        <Card style={{ width: '18rem' }} bg="info" text="white">
+        <Card style={{ width: '20rem' }} bg="info" text="white">
       <Card.Body>
       <Card.Title>Id :{id}</Card.Title>
       <Card.Title className="mb-2">Title: {title}</Card.Title>

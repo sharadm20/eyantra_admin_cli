@@ -1,124 +1,142 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Jumbotron, Container, Card, Row } from 'react-bootstrap';
 import { userActions } from '../../_actions';
+import { bindActionCreators } from 'redux';
 import './Talk.css';
-import Sidebar from '../../_components/Sidebar';
+import { Spinner, ResponsiveEmbed } from 'react-bootstrap';
+import Pagination from '../../_components/Pagination';
+
 
 class TalkPage extends React.Component {
 
     constructor(props) {
         super(props);
+        
         this.state = {
-            title: '',
-            message: '',
-            fcm_token: '',
-            click_action:'',
-            sound:'',
-            status:'',
-            screen:'',
+            talks: [], talk: [],formData: [], currentPage: null, totalPages: null,
             submitted: false
         };
+    }
+
+    componentWillMount=()=> {
+        const {getAllTalk} = this.props;
+        getAllTalk();
+    }
+
+    shouldComponentRender=() =>{
+        const {loading} = this.props;
+       
+        if(loading === false) return true
+        else if (typeof loading === undefined) return true;
+        else if(loading === true) return false;
     }
 
     handleChange=(e) => {
         const { name, value } = e.target;
         this.setState({ [name]: value });
     }
+
+    onPageChanged = data => {
+        const { items } = this.props;
+        const { currentPage, totalPages, pageLimit } = data;
+        const offset = (currentPage - 1) * pageLimit;
+        const talks = items.slice(offset, offset + pageLimit);
+    
+        this.setState({ currentPage, talks, totalPages });
+      }
  
     handleSubmit=(e) => {
-        e.preventDefault();
-        this.setState({ submitted: true });
-         const { title, message, fcm_token, click_action, sound, status, screen } = this.state;
-        const { dispatch } = this.props;
-        if (title && message) {
-            dispatch(userActions.notification(title, message, fcm_token, screen));
+          this.setState({formData:this.state.formData.push(e)})
+           this.props.editTalk(this.state.formData);
+           this.componentWillMount()
+    }
+    addAnnouncement=(e) => {
+      const { addTalk } = this.props;
+      
+
+      }
+      
+    handleDelete=(id) => {
+       console.log(id)
+       this.props.deleteTalk(id);
         }
 
-    }
+ 
+
 
     render() {
-        const { user, loading } = this.props;
-        
-        const { title, message, fcm_token,submitted, click_action, sound, status, screen } = this.state;
+        const {  currentPage, totalPages, talks } = this.state;
+        let totalTalks =0;
+      
+        if(!this.shouldComponentRender()) return (<Spinner animation="border" role="status">
+        <span className="sr-only">Loading...</span>
+      </Spinner>);
+        const { items } = this.props;
+        totalTalks = items?items.length:0;
+        if (totalTalks === 0) return null;
+    
+        const headerClass = ['text-dark py-2 pr-4 m-0', currentPage ? 'border-gray border-right' : ''].join(' ').trim();
+    
         return (
-            <Container className="home">
-            <Row>
-            <div className="col-md-3">            
-            <Sidebar/> 
+          <div className="container mb-5">
+            <div className="row d-flex flex-row py-5">
+    
+              <div className="w-100 px-4 py-5 d-flex flex-row flex-wrap align-items-center justify-content-between">
+                <div className="d-flex flex-row align-items-center">
+    
+                  <h2 className={headerClass}>
+                    <strong className="text-secondary">{totalTalks}</strong> Talk Event
+                    {/* <AnnouncementModal handleSubmit={this.addAnnouncement} /> */}
+                  </h2>
+    
+                  { currentPage && (
+                    <span className="current-page d-inline-block h-100 pl-4 text-secondary">
+                      Page <span className="font-weight-bold">{ currentPage }</span> / <span className="font-weight-bold">{ totalPages }</span>
+                    </span>
+                  ) }
+    
+                </div>
+    
+                <div className="d-flex flex-row py-4 align-items-center">
+                  <Pagination totalRecords={totalTalks} pageLimit={8} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+                </div>
+              </div>
+              
+              { talks.map(talk =>{
+                  const url = talk.link.replace("watch?v=", "v/");
+                  return (  <div style={{ width: 660, height: 'auto' }}>
+                            <ResponsiveEmbed aspectRatio="16by9">
+                            <embed type="video" src={url} />
+                            </ResponsiveEmbed>
+                                </div>              
+                  
+              )} ) }
+      
             </div>
-
-            <Jumbotron className="col-md-8">
-                <h2>Hi {user.user.firstName}!</h2>
-                <p className="alert alert-primary">You're logged in with eYantra!!</p>
-                <h3>Notification Setting Panel:</h3>
-                <Card bg="dark" text="white">
-                    <Card.Header>
-                        Settings
-                    </Card.Header>
-                    <Card.Body>
-                        {/* <h5 className="card-title">Special title treatment</h5>
-                        <p className="card-text">With supporting text below as a natural lead-in to additional content.</p> */}
-                        {/* <a href="#" className="btn btn-primary">Go somewhere</a> */}
-                        <form onSubmit={this.handleSubmit}>
-                            <div className="form-row">
-                                <div className="form-group col-md-6">
-                                    <label htmlFor="title">Title</label>
-                                    <input type="text" className={'form-control' + (submitted && !title ? ' is-invalid' : '')} name="title" id="title" placeholder="Title" onChange={this.handleChange}/>
-                                    {submitted && !title &&
-                                        <div className="invalid-feedback">Title is required</div>
-                                    }
-                            </div>
-                                <div className="form-group col-md-6">
-                            <label htmlFor="message">Body</label>
-                                    <input type="text" className={'form-control' + (submitted && !message ? ' is-invalid' : '')} name="message" id="message" placeholder="Body" onChange={this.handleChange}/>
-                                    {submitted && !message &&
-                                        <div className="invalid-feedback">Body is required</div>
-                                    }
-                            </div>
-                        </div>
-                            <div className="form-row">
-                                <div className="form-group col-md-8">
-                                    <label htmlFor="title">Fcm Token</label>
-                                    <input type="text" className={'form-control' + (submitted && !fcm_token ? ' is-invalid' : '')} name="fcm_token" id="fcm_token" placeholder="FCM Token" onChange={this.handleChange} />
-                                    {submitted && !fcm_token &&
-                                        <div className="invalid-feedback">Fcm token is required</div>
-                                    }
-                                </div>
-                              
-                            </div>
-                             <div className="form-row">
-                                <div className="form-group col-md-8">
-                                    <label htmlFor="title">Screen</label>
-                                    <input type="text" className={'form-control' + (submitted && !screen ? ' is-invalid' : '')} name="screen" id="screen" placeholder="Screen" onChange={this.handleChange} />
-                                    {submitted && !screen &&
-                                        <div className="invalid-feedback">Screen text is required</div>
-                                    }
-                                </div>
-                              
-                            </div>
-                        <button type="submit" className="btn btn-danger">Send Notification</button>
-                        </form>
-                    </Card.Body>
-                    {loading &&
-                        <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                    }
-                </Card>
-           
-            </Jumbotron>
-            </Row>
-        </Container>
+          </div>
         );
-    }
-}
+      }
+    }    
 
 function mapStateToProps(state) {
-    const {  authentication } = state;
+    const {  authentication, talks } = state;
     const { user } = authentication;
+    const { loading,items } = talks;
+    
+     
     return {
-        user
+        user,
+        items,
+        loading
     };
 }
 
-const connectedTalkPage = connect(mapStateToProps)(TalkPage);
+const mapDispatchToProps = dispatch => bindActionCreators({
+    getAllTalk: userActions.getAllTalk,
+    addTalk: userActions.addTalk, 
+    editTalk: userActions.editTalk,
+    deleteTalk: userActions.deleteTalk
+}, dispatch)
+
+const connectedTalkPage = connect(mapStateToProps, mapDispatchToProps)(TalkPage);
 export { connectedTalkPage as TalkPage };

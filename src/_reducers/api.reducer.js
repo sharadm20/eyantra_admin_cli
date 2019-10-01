@@ -3,8 +3,8 @@ import { userConstants } from '../_constants';
 export const apiReducer = {
   registration,
   announcements,
-  talk,
-  lab,
+  talks,
+  labs,
   calendar
 };
 
@@ -24,21 +24,27 @@ function registration(state = {}, action) {
 function announcements(state = {}, action) {
   switch (action.type) {
     case userConstants.ANNOUNCEMENT_REQUEST:
-      return { loading: true };
+      return { ...state };
     case userConstants.ANNOUNCEMENT_SUCCESS:
-      return {};
-      case userConstants.ANNOUNCEMENTS_FETCH_SUCCESS:
-        // console.log('here')
-      return  {items: action.announcements.data, loading: false};
+      return { ...state,
+        loading:false,
+         items: state.items.concat(action.announcement)
+        };
     case userConstants.ANNOUNCEMENT_FAILURE:
-      return {};
-      case userConstants.EDIT_ANNOUNCEMENT_REQUEST:
+      return {...state, loading: false};
+    case userConstants.ANNOUNCEMENTS_FETCH_REQUEST:
+      return { loading: true };
+    case userConstants.ANNOUNCEMENTS_FETCH_FAILURE:
+        return {};
+    case userConstants.ANNOUNCEMENTS_FETCH_SUCCESS:
+      return  {items: action.announcements.data, loading: false}; 
+    case userConstants.EDIT_ANNOUNCEMENT_REQUEST:
       return { editing: true };
     case userConstants.EDIT_ANNOUNCEMENT_SUCCESS:
       return {};
     case userConstants.EDIT_ANNOUNCEMENT_FAILURE:
       return {};
-      case userConstants.DELETE_ANNOUNCEMENT_REQUEST:
+    case userConstants.DELETE_ANNOUNCEMENT_REQUEST:
       // add 'deleting:true' property to user being deleted
       return {
         ...state,
@@ -50,7 +56,6 @@ function announcements(state = {}, action) {
       };
     case userConstants.DELETE_ANNOUNCEMENT_SUCCESS:
       // remove deleted user from state
-      console.log(action.id)
       return {
         loading: false,
         items: state.items.filter(announcement => announcement.id !== action.id)
@@ -80,7 +85,7 @@ function calendar(state = {}, action) {
     case userConstants.CALENDAR_REQUEST:
       return { loading: true };
     case userConstants.CALENDAR_SUCCESS:
-      return {};
+      return {loading: false, items: action.calendars.data};
     case userConstants.CALENDAR_FAILURE:
       return {};
     default:
@@ -88,12 +93,12 @@ function calendar(state = {}, action) {
   }
 }
 
-function talk(state = {}, action) {
+function labs(state = {}, action) {
   switch (action.type) {
     case userConstants.LAB_REQUEST:
       return { loading: true };
     case userConstants.LAB_SUCCESS:
-      return {};
+      return {loading: false, items: action.labs.data};
     case userConstants.LAB_FAILURE:
       return {};
     default:
@@ -101,12 +106,12 @@ function talk(state = {}, action) {
   }
 }
 
-function lab(state = {}, action) {
+function talks(state = {}, action) {
   switch (action.type) {
     case userConstants.TALK_REQUEST:
       return { loading: true };
     case userConstants.TALK_SUCCESS:
-      return {};
+      return {loading: false, items: action.talks.data};
     case userConstants.TALK_FAILURE:
       return {};
     default:
