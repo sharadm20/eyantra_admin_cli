@@ -16,8 +16,11 @@ export const userActions = {
     deleteAnnouncement,
     getAll,
     getAllCalendar,
+    addCalendar,
     getAllLab,
+    addLab,
     getAllTalk,
+    addTalk,
     delete: _delete
 };
 
@@ -278,8 +281,31 @@ function getAllCalendar() {
             );
     };
 
+    function request() { return { type: userConstants.CALENDARS_FETCH_REQUEST} }
+    function success(calendars) { return { type: userConstants.CALENDARS_FETCH_SUCCESS, calendars } }
+    function failure(error) { return { type: userConstants.CALENDARS_FETCH_FAILURE, error } }
+}
+
+function addCalendar(calendar) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.addCalendar(calendar)
+            .then(
+                calendar => { 
+                    dispatch(success(calendar));
+                    dispatch(alertActions.success(res.message));
+                    
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
     function request() { return { type: userConstants.CALENDAR_REQUEST} }
-    function success(calendars) { return { type: userConstants.CALENDAR_SUCCESS, calendars } }
+    function success(calendar) { return { type: userConstants.CALENDAR_SUCCESS, calendar } }
     function failure(error) { return { type: userConstants.CALENDAR_FAILURE, error } }
 }
 
@@ -301,8 +327,30 @@ function getAllLab() {
             );
     };
 
+    function request() { return { type: userConstants.LABS_FETCH_REQUEST} }
+    function success(labs) { return { type: userConstants.LABS_FETCH_SUCCESS, labs } }
+    function failure(error) { return { type: userConstants.LABS_FETCH_FAILURE, error } }
+}
+function addLab(lab) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.addLab(lab)
+            .then(
+                res => { 
+                    dispatch(success(res.data));
+                    dispatch(alertActions.success(res.message));
+                    
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
     function request() { return { type: userConstants.LAB_REQUEST} }
-    function success(labs) { return { type: userConstants.LAB_SUCCESS, labs } }
+    function success(lab) { return { type: userConstants.LAB_SUCCESS, lab } }
     function failure(error) { return { type: userConstants.LAB_FAILURE, error } }
 }
 
@@ -324,7 +372,30 @@ function getAllTalk() {
             );
     };
 
+    function request() { return { type: userConstants.TALKS_FETCH_REQUEST} }
+    function success(talks) { return { type: userConstants.TALKS_FETCH_SUCCESS, talks } }
+    function failure(error) { return { type: userConstants.TALKS_FETCH_FAILURE, error } }
+}
+
+function addTalk(talk) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.addTalk(talk)
+            .then(
+                res => { 
+                    dispatch(success(res.data));
+                    dispatch(alertActions.success(res.message));
+                    
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
     function request() { return { type: userConstants.TALK_REQUEST} }
-    function success(talks) { return { type: userConstants.TALK_SUCCESS, talks } }
+    function success(talk) { return { type: userConstants.TALK_SUCCESS, talk } }
     function failure(error) { return { type: userConstants.TALK_FAILURE, error } }
 }

@@ -6,7 +6,7 @@ import { users } from './users.reducer';
 import { alert } from './alert.reducer';
 import { notification } from './notification.reducer';
 
-const { registration, announcements, calendar, talks, labs }=apiReducer;
+const { registration, announcements, calendars, talks, labs }=apiReducer;
 
 
 const rootReducer = combineReducers({
@@ -16,7 +16,7 @@ const rootReducer = combineReducers({
   alert,
   notification,
   announcements,
-  calendar,
+  calendars,
   labs,
   talks
 });

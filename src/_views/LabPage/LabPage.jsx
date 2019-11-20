@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import './Lab.css';
 import { Spinner, Table } from 'react-bootstrap';
 import Pagination from '../../_components/Pagination';
+import LabModal from './LabModal';
 
 
 class LabPage extends React.Component {
@@ -50,9 +51,9 @@ class LabPage extends React.Component {
            this.props.editLab(this.state.formData);
            this.componentWillMount()
     }
-    addAnnouncement=(e) => {
+    addLab=(e) => {
       const { addLab } = this.props;
-      
+      addLab(e)
 
       }
       
@@ -86,7 +87,7 @@ class LabPage extends React.Component {
     
                   <h2 className={headerClass}>
                     <strong className="text-secondary">{totalLabs}</strong> Labs
-                    {/* <AnnouncementModal handleSubmit={this.addAnnouncement} /> */}
+                    <LabModal handleSubmit={this.addLab} />
                   </h2>
     
                   { currentPage && (

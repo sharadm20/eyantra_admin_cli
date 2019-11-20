@@ -15,8 +15,11 @@ export const userService = {
     editAnnouncement,
     deleteAnnouncement,
     getAllCalendar,
+    addCalendar,
     getAllLab,
+    addLab,
     getAllTalk,
+    addTalk,
     update,
     delete: _delete
 };
@@ -176,6 +179,16 @@ function getAllCalendar() {
     return fetch(`${config.apiUrl}/calendars`, requestOptions).then(handleResponse);
 }
 
+function addCalendar(calendar){
+    const requestOptions = {
+        method: 'POST',
+         mode: 'cors',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(calendar)
+    };
+    return fetch(`${config.apiUrl}/calendars`, requestOptions).then(handleResponse);
+}
+
 function getAllLab() {
     const requestOptions = {
         method: 'GET',
@@ -184,11 +197,30 @@ function getAllLab() {
     };
     return fetch(`${config.apiUrl}/labs`, requestOptions).then(handleResponse);
 }
+function addLab(lab){
+    const requestOptions = {
+        method: 'POST',
+         mode: 'cors',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(lab)
+    };
+    return fetch(`${config.apiUrl}/labs`, requestOptions).then(handleResponse);
+}
 function getAllTalk() {
     const requestOptions = {
         method: 'GET',
          mode: 'cors',
         headers: { ...authHeader(), 'Content-Type': 'application/json' }
+    };
+    return fetch(`${config.apiUrl}/talks`, requestOptions).then(handleResponse);
+}
+
+function addTalk(talk){
+    const requestOptions = {
+        method: 'POST',
+         mode: 'cors',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(talk)
     };
     return fetch(`${config.apiUrl}/talks`, requestOptions).then(handleResponse);
 }

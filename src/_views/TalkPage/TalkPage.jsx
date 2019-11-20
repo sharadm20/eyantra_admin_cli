@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import './Talk.css';
 import { Spinner, ResponsiveEmbed } from 'react-bootstrap';
 import Pagination from '../../_components/Pagination';
+import TalkModal from './TalkModal';
 
 
 class TalkPage extends React.Component {
@@ -50,9 +51,9 @@ class TalkPage extends React.Component {
            this.props.editTalk(this.state.formData);
            this.componentWillMount()
     }
-    addAnnouncement=(e) => {
+    addTalk=(e) => {
       const { addTalk } = this.props;
-      
+      addTalk(e)
 
       }
       
@@ -73,7 +74,7 @@ class TalkPage extends React.Component {
       </Spinner>);
         const { items } = this.props;
         totalTalks = items?items.length:0;
-        if (totalTalks === 0) return null;
+        
     
         const headerClass = ['text-dark py-2 pr-4 m-0', currentPage ? 'border-gray border-right' : ''].join(' ').trim();
     
@@ -86,7 +87,7 @@ class TalkPage extends React.Component {
     
                   <h2 className={headerClass}>
                     <strong className="text-secondary">{totalTalks}</strong> Talk Event
-                    {/* <AnnouncementModal handleSubmit={this.addAnnouncement} /> */}
+                    <TalkModal handleSubmit={this.addTalk} />
                   </h2>
     
                   { currentPage && (
