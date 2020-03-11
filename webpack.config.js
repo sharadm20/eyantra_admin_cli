@@ -36,7 +36,7 @@ module.exports = {
     externals: {
         // global app config object
         config: JSON.stringify({
-            apiUrl: 'https://api.e-yanntra.org/api'
+            apiUrl: 'http://api.e-yantra.org/api'
         })
     }
 }
