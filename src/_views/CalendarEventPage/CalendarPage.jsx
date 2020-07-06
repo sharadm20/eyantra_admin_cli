@@ -52,8 +52,9 @@ class CalendarPage extends React.Component {
            this.componentWillMount()
     }
     addCalendar=(e) => {
+      console.log(e.date);
       const { addCalendar } = this.props;
-      addCalendar(e);
+      addCalendar(e.event, e.date, e.description, e.location);
 
       }
 

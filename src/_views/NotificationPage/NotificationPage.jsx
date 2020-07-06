@@ -30,10 +30,10 @@ class NotificationPage extends React.Component {
     handleSubmit=(e) => {
         e.preventDefault();
         this.setState({ submitted: true });
-         const { title, message, topic } = this.state;
+         const { title, message, topic, screen } = this.state;
         const { dispatch } = this.props;
         if (title && message) {
-            dispatch(userActions.notificationToTopic(title, message, topic));
+            dispatch(userActions.notificationToTopic(title, message, topic, screen));
         }
         
     }
@@ -41,7 +41,7 @@ class NotificationPage extends React.Component {
     render() {
         const { user } = this.props;
         const { loading } =this.props;
-        const { title, message,topic, submitted } = this.state;
+        const { title, message,topic, submitted, screen } = this.state;
         return (
             <Row>
             {/* <div className="col-md-3">            
@@ -76,6 +76,17 @@ class NotificationPage extends React.Component {
                                     }
                             </div>
                         </div>
+                        <div className="form-row">
+                                <div className="form-group col-md-8">
+                                    <label htmlFor="screen">Screen</label>
+                                    <input type="text" className={'form-control' + (submitted && !screen ? ' is-invalid' : '')} name="screen" id="screen" placeholder="Screen" onChange={this.handleChange}/>
+                                    {submitted && !screen &&
+                                        <div className="invalid-feedback">Screen is required</div>
+                                    }
+                            </div>
+                
+                        </div>
+                        
                             <div className="form-row">
                                 {/* <div className="form-group col-md-8">
                                     <label htmlFor="title">Topic</label>

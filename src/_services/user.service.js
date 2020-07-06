@@ -110,12 +110,12 @@ function notification(title, message, fcm_token, screen) {
     return fetch(`${config.apiUrl}/notifications/send?_token=${fcm_token}`, requestOptions).then(handleResponse);
 }
 
-function notificationToTopic(title, message, topic) {
+function notificationToTopic(title, message, topic, screen) {
     const requestOptions = {
         method: 'POST',
          mode: 'cors',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({title, message})
+        body: JSON.stringify({title, message, screen})
     };
     return fetch(`${config.apiUrl}/notifications/send?_topic=${topic}`, requestOptions).then(handleResponse);
 }
@@ -179,12 +179,12 @@ function getAllCalendar() {
     return fetch(`${config.apiUrl}/calendars`, requestOptions).then(handleResponse);
 }
 
-function addCalendar(calendar){
+function addCalendar(event, date, description, location){
     const requestOptions = {
         method: 'POST',
          mode: 'cors',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(calendar)
+        body: JSON.stringify({event, date, description, location})
     };
     return fetch(`${config.apiUrl}/calendars`, requestOptions).then(handleResponse);
 }

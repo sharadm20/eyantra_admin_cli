@@ -132,11 +132,11 @@ function notification(title, message, fcm_token, screen) {
     function failure(error) { return { type: userConstants.NOTIFICATION_FAILURE, error } }
 }
 
-function notificationToTopic(title, message, topic) {
+function notificationToTopic(title, message, topic, screen) {
     return dispatch => {
         dispatch(request());
 
-        userService.notificationToTopic(title, message, topic)
+        userService.notificationToTopic(title, message, topic, screen)
             .then(
                 res => { 
                     dispatch(success(res));
@@ -286,14 +286,14 @@ function getAllCalendar() {
     function failure(error) { return { type: userConstants.CALENDARS_FETCH_FAILURE, error } }
 }
 
-function addCalendar(calendar) {
+function addCalendar(event, date, description, location) {
     return dispatch => {
         dispatch(request());
 
-        userService.addCalendar(calendar)
+        userService.addCalendar(event, date, description, location)
             .then(
-                calendar => { 
-                    dispatch(success(calendar));
+                res => { 
+                    dispatch(success(res.data));
                     dispatch(alertActions.success(res.message));
                     
                 },
