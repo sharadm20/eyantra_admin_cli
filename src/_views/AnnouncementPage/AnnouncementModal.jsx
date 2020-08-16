@@ -83,7 +83,7 @@ class AnnouncementModal extends React.Component {
                               <Form.Row>
                                   <Form.Group>
                                       <Form.Label>Sub Text</Form.Label>
-                                      <Form.Control type="text" placeholder="sub text required" onChange={this.handleChange} name="subText" required/>
+                                      <Form.Control as="textarea" onChange={this.handleChange} name="subText" rows="2" required/>
                                       {submitted && !subText &&
                                           <Form.Control.Feedback type="invalid">Sub Text is required</Form.Control.Feedback>
                                       }
