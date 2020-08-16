@@ -1,5 +1,4 @@
 import React from 'react';
-import MarkdownEditor from '@uiw/react-markdown-editor';
 import { Card, Button, Row, Col, Form } from 'react-bootstrap';
 import './Announcement.css';
 
@@ -140,11 +139,7 @@ onDelete=()=>{
                             <Form.Row>
                                 <Form.Group>
                                     <Form.Label>Body</Form.Label>
-                                    <MarkdownEditor
-                                        value={body}
-                                        onChange={this.handleChange}
-                                      />
-                                    {/* <Form.Control as="textarea" onChange={this.handleChange} name="body" value={body} rows="5"/> */}
+                                    <Form.Control as="textarea" onChange={this.handleChange} name="body" value={body} rows="5"/>
                                     {submitted && !body &&
                                         <Form.Control.Feedback type="invalid">Body is required</Form.Control.Feedback>
                                     }
