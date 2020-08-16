@@ -119,7 +119,10 @@ class AnnouncementModal extends React.Component {
                               <Form.Row>
                                   <Form.Group>
                                       <Form.Label>Body</Form.Label>
-                                      <Form.Control as="textarea" onChange={this.handleChange} name="body" rows="5"/>
+                                      <MarkdownEditor
+                                        value={body}
+                                        onChange={this.handleChange}
+                                      />
                                       {submitted && !body &&
                                           <Form.Control.Feedback type="invalid">Body is required</Form.Control.Feedback>
                                       }
